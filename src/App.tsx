@@ -38,6 +38,7 @@ import AdvancedWoundCare from "./components/AdvancedWoundCare";
 import BulkOrders from "./pages/BulkOrder";
 import BulkCheckout from "./pages/BulkCheckout";
 import Search from "./pages/Search";
+import OrderTracking from "./pages/OrderTracking";
 
 const queryClient = new QueryClient();
 
@@ -48,7 +49,7 @@ const App = () => (
         <CartProvider>
           <TooltipProvider>
             <Toaster />
-            <Sonner />    
+            <Sonner />
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -71,13 +72,14 @@ const App = () => (
                 {/* <Route path="/wishlist" element={<Wishlist />} /> */}
                 <Route path="/reviews/:id" element={<ReviewsPage />} />
 
-                <Route path="/big-saving" element={<BigSaving/>}/>
-                <Route path="/health-care" element={<HealthCareEssential/>}/>
-                <Route path="/lab-diagnostics"element={<LabDiagnostics/>}/>
-                <Route path="/Advance-care" element={<AdvancedWoundCare/>}/>
+                <Route path="/big-saving" element={<BigSaving />} />
+                <Route path="/health-care" element={<HealthCareEssential />} />
+                <Route path="/lab-diagnostics" element={<LabDiagnostics />} />
+                <Route path="/Advance-care" element={<AdvancedWoundCare />} />
                 <Route path="/bulk-orders" element={<BulkOrders />} />
-                <Route path="/bulk-checkout/:quotationId"element={<BulkCheckout />}/>
-                <Route path="/search" element={<Search/>}/>
+                <Route path="/bulk-checkout/:quotationId" element={<BulkCheckout />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/order/:id" element={<OrderTracking />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />

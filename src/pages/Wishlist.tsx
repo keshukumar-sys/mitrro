@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,73 +7,42 @@ import { Badge } from "@/components/ui/badge";
 
 export default function Wishlist() {
   const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [recommended, setRecommended] = useState<any[]>([]);
   const navigate = useNavigate();
 
   // 1. Get logged-in user
   useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUserId(data?.user?.id || null);
-    };
-    getUser();
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        setUserId(user.id || null);
+      } catch (e) {
+        console.error('Failed to parse user', e);
+      }
+    }
   }, []);
 
-  // 2. Fetch wishlist items
+  // 2. Fetch wishlist items (Mocked for now)
   useEffect(() => {
     if (!userId) return;
-
-    const fetchWishlist = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("wishlist")
-        .select("id, product_id, products(*)")
-        .eq("user_id", userId);
-
-      if (!error) setItems(data || []);
-      setLoading(false);
-    };
-
-    fetchWishlist();
+    setLoading(true);
+    // TODO: Connect to MongoDB wishlist API if available
+    setItems([]);
+    setLoading(false);
   }, [userId]);
 
   // 3. Remove from wishlist
   const handleRemove = async (wishlistId: string) => {
-    const { error } = await supabase
-      .from("wishlist")
-      .delete()
-      .eq("id", wishlistId);
-
-    if (!error) {
-      setItems((prev) => prev.filter((item) => item.id !== wishlistId));
-    }
+    setItems((prev) => prev.filter((item) => item.id !== wishlistId));
   };
 
-  // 4. Fetch recommended products (8 different categories)
+  // 4. Fetch recommended products (Mocked for now)
   useEffect(() => {
-    const fetchRecommended = async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (!error && data) {
-        // Get one product per category
-        const uniqueCategories: { [key: string]: any } = {};
-        for (const product of data) {
-          if (
-            !uniqueCategories[product.category] &&
-            Object.keys(uniqueCategories).length < 8
-          ) {
-            uniqueCategories[product.category] = product;
-          }
-        }
-        setRecommended(Object.values(uniqueCategories));
-      }
-    };
-    fetchRecommended();
+    // TODO: Connect to MongoDB products API
+    setRecommended([]);
   }, []);
 
   // Helper for discount

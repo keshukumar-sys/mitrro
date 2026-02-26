@@ -17,7 +17,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BulkOrderForm from "@/components/BulkOrderForm";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3002";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://mitrro-backend-mongodb.onrender.com";
 
 const Checkout = () => {
   const navigate = useNavigate();

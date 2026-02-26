@@ -51,7 +51,7 @@ const Signup = () => {
     try {
       const validated = signupSchema.parse(formData);
 
-      const res = await fetch("http://localhost:3002/api/users/signup", {
+      const res = await fetch("https://mitrro-backend-mongodb.onrender.com/api/users/signup", {
         method: "POST",
         credentials: "include", // ✅ COOKIE AUTH
         headers: {

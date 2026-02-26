@@ -18,7 +18,7 @@ import Footer from "@/components/Footer";
 import BulkOrderForm from "@/components/BulkOrderForm";
 
 const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:3002";
+  import.meta.env.VITE_BACKEND_URL || "https://mitrro-backend-mongodb.onrender.com";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ const Checkout = () => {
         return;
       }
       console.log(BACKEND_URL);
-      const res = await fetch(`http://localhost:3002/api/orders/checkout`, {
+      const res = await fetch(`https://mitrro-backend-mongodb.onrender.com/api/orders/checkout`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

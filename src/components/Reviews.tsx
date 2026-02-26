@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -13,25 +12,14 @@ interface Review {
 
 export default function Reviews() {
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("custome_reviews")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (!error && data) {
-        // Pick 3 random reviews
-        const shuffled = data.sort(() => 0.5 - Math.random());
-        setReviews(shuffled.slice(0, 3));
-      }
-
-      setLoading(false);
-    };
-    fetchReviews();
+    setLoading(true);
+    // TODO: Connect to MongoDB reviews API
+    setReviews([]);
+    setLoading(false);
   }, []);
 
   return (

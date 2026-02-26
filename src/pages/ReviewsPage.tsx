@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -13,57 +12,33 @@ interface Review {
 
 export default function ReviewDetailPage() {
   const { id } = useParams(); // review id from URL
-  console.log(id);
   const navigate = useNavigate();
 
   const [currentReview, setCurrentReview] = useState<Review | null>(null);
   const [otherReviews, setOtherReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Form state
   const [name, setName] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch current review + all other reviews
+  // Fetch reviews (Mocked for now)
   useEffect(() => {
-    const fetchReviews = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("custome_reviews")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      console.log(data);
-
-      if (!error && data) {
-        const current = data.find((r) => r.id == id) || null;
-        const others = data.filter((r) => r.id !== id);
-        setCurrentReview(current);
-        setOtherReviews(others);
-      }
-
-      setLoading(false);
-    };
-
-    fetchReviews();
+    setLoading(true);
+    // TODO: Connect to MongoDB reviews API
+    setCurrentReview(null);
+    setOtherReviews([]);
+    setLoading(false);
   }, [id]);
 
-  // Handle new review submission
+  // Handle new review submission (Mocked)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-
-    const { data, error } = await supabase
-      .from("custome_reviews")
-      .insert([{ name, review: reviewText }]);
-
-    if (!error && data) {
-      setOtherReviews((prev) => [data[0], ...prev]);
-      setName("");
-      setReviewText("");
-    }
-
+    // TODO: Connect to MongoDB reviews API
+    setName("");
+    setReviewText("");
     setSubmitting(false);
   };
 

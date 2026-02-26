@@ -2,7 +2,6 @@ import ProductCard from "../components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
@@ -21,8 +20,8 @@ const LIMIT = 8; // products per page
 const SpecialOffersPage = () => {
   const [products, setProducts] = useState<SpecialProduct[]>([]);
   const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userLoaded, setUserLoaded] = useState(false);
   const [user, setUser] = useState<any>(null);
 
@@ -30,12 +29,11 @@ const SpecialOffersPage = () => {
 
   // Fetch logged-in user
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user);
-      setUserLoaded(true);
-    };
-    fetchUser();
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    setUserLoaded(true);
   }, []);
 
   // Redirect when user is loaded but not logged in
@@ -44,24 +42,12 @@ const SpecialOffersPage = () => {
     if (!user) navigate("/login");
   }, [userLoaded, user, navigate]);
 
-  // Fetch products from database
+  // Fetch products (Mocked)
   const fetchProducts = async () => {
+    // TODO: Connect to MongoDB special offers API
     setLoading(true);
-
-    const start = page * LIMIT;
-    const end = start + LIMIT - 1;
-
-    const { data, error } = await supabase
-      .from("special_offer")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .range(start, end);
-
-    if (!error && data) {
-      setProducts((prev) => [...prev, ...data]);
-      if (data.length < LIMIT) setHasMore(false);
-    }
-
+    setProducts([]);
+    setHasMore(false);
     setLoading(false);
   };
 

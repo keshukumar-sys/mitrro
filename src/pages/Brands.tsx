@@ -377,7 +377,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:3002";
+  import.meta.env.VITE_BACKEND_URL || "https://mitrro-backend-mongodb.onrender.com";
 
 const Brands = () => {
   const { toast } = useToast();

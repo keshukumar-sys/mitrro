@@ -12,7 +12,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const contactFormSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -29,7 +28,7 @@ type ContactFormData = z.infer<typeof contactFormSchema>;
 const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
-  
+
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -45,28 +44,12 @@ const Contact = () => {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      const fullName = `${data.firstName} ${data.lastName}`;
-      const detailedMessage = `Subject: ${data.subject}\nCompany: ${data.company}\n\n${data.message}`;
-      
-      const { data: insertedData, error } = await supabase
-        .from('contact_inquiries')
-        .insert({
-          name: fullName,
-          email: data.email,
-          phone: data.phone,
-          message: detailedMessage,
-        });
- 
-      if (error) {
-        console.error("Supabase insert error:", error);
-        throw error;
-      }
+      // TODO: Connect to MongoDB contact API
+      console.log("Contact form data:", data);
 
-      console.log("Contact form submitted successfully:", insertedData);
-      
       setIsSubmitted(true);
       form.reset();
-      
+
       toast({
         title: "Message Sent!",
         description: "We've received your message and will respond within 24 hours.",
@@ -107,7 +90,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       {/* Hero Section */}
       <section className="bg-gradient-hero py-20 text-white">
         <div className="container mx-auto px-4 text-center">
@@ -124,7 +107,7 @@ const Contact = () => {
             {/* Contact Information */}
             <div className="lg:col-span-1">
               <h2 className="text-3xl font-bold text-foreground mb-8">Get in Touch</h2>
-              
+
               <div className="space-y-6">
                 <Card className="border-0 shadow-card">
                   <CardContent className="p-6">
@@ -229,7 +212,7 @@ const Contact = () => {
                             </FormItem>
                           )}
                         />
-                        
+
                         <FormField
                           control={form.control}
                           name="lastName"
@@ -259,7 +242,7 @@ const Contact = () => {
                             </FormItem>
                           )}
                         />
-                        
+
                         <FormField
                           control={form.control}
                           name="phone"
@@ -289,7 +272,7 @@ const Contact = () => {
                             </FormItem>
                           )}
                         />
-                        
+
                         <FormField
                           control={form.control}
                           name="subject"
@@ -326,7 +309,7 @@ const Contact = () => {
                           <FormItem>
                             <FormLabel>Message *</FormLabel>
                             <FormControl>
-                              <Textarea 
+                              <Textarea
                                 placeholder="Please provide details about your inquiry..."
                                 className="min-h-[120px]"
                                 {...field}
@@ -338,8 +321,8 @@ const Contact = () => {
                       />
 
                       <div className="text-center pt-6">
-                        <Button 
-                          type="submit" 
+                        <Button
+                          type="submit"
                           size="lg"
                           className="bg-gradient-primary hover:opacity-90 px-12"
                         >
@@ -365,7 +348,7 @@ const Contact = () => {
               For urgent inquiries or emergency support, use one of these direct contact methods.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <Card className="text-center border-0 shadow-card">
               <CardHeader>
@@ -381,7 +364,7 @@ const Contact = () => {
                 </Button>
               </CardContent>
             </Card>
-            
+
             <Card className="text-center border-0 shadow-card">
               <CardHeader>
                 <MessageSquare className="h-12 w-12 text-primary mx-auto mb-4" />
@@ -396,7 +379,7 @@ const Contact = () => {
                 </Button>
               </CardContent>
             </Card>
-            
+
             <Card className="text-center border-0 shadow-card">
               <CardHeader>
                 <Mail className="h-12 w-12 text-primary mx-auto mb-4" />

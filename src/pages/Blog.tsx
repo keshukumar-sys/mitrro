@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Calendar, User, Clock, Search, ArrowRight, TrendingUp, Heart, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const blogPosts = [
   {
@@ -313,7 +312,7 @@ const Blog = () => {
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newsletterEmail || !newsletterEmail.includes('@')) {
       toast({
         title: "Invalid Email",
@@ -326,34 +325,20 @@ const Blog = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
-        .from('newsletter_subscriptions')
-        .insert({ email: newsletterEmail });
-
-      if (error) {
-        throw error;
-      }
-
+      // TODO: Connect to MongoDB newsletter API
+      console.log("Newsletter email:", newsletterEmail);
       setNewsletterEmail("");
-      
+
       toast({
         title: "Subscribed!",
         description: "You've successfully subscribed to our newsletter.",
       });
     } catch (error: any) {
-      if (error.code === '23505') {
-        toast({
-          title: "Already Subscribed",
-          description: "This email is already subscribed to our newsletter.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: error?.message || "Failed to subscribe. Please try again.",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Error",
+        description: error?.message || "Failed to subscribe. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -362,7 +347,7 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       {/* Hero Section */}
       <section className="bg-gradient-hero py-20 text-white">
         <div className="container mx-auto px-4 text-center">
@@ -396,8 +381,8 @@ const Blog = () => {
               <Card key={post.id} className="shadow-hover border-0 overflow-hidden">
                 <div className="grid lg:grid-cols-2 gap-0">
                   <div className="relative h-64 lg:h-auto">
-                    <img 
-                      src={post.image} 
+                    <img
+                      src={post.image}
                       alt={post.title}
                       className="w-full h-full object-cover"
                     />
@@ -466,63 +451,63 @@ const Blog = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-foreground mb-12 text-center">Latest Articles</h2>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts
               .filter(post => !post.featured && (activeCategory === "All" || post.category === activeCategory))
               .slice(0, visiblePosts)
               .map(post => (
-              <Card key={post.id} className="shadow-card hover:shadow-hover transition-all duration-300 border-0 overflow-hidden group">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={post.image} 
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <Badge className="absolute top-4 left-4 bg-primary/90 text-primary-foreground">
-                    {post.category}
-                  </Badge>
-                </div>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    {post.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground mb-4 line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center space-x-2">
-                      <User className="h-4 w-4" />
-                      <span className="truncate">{post.author}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock className="h-4 w-4" />
-                      <span>{post.readTime}</span>
-                    </div>
+                <Card key={post.id} className="shadow-card hover:shadow-hover transition-all duration-300 border-0 overflow-hidden group">
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <Badge className="absolute top-4 left-4 bg-primary/90 text-primary-foreground">
+                      {post.category}
+                    </Badge>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
-                      <span>{post.date}</span>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                      {post.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-muted-foreground mb-4 line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                      <div className="flex items-center space-x-2">
+                        <User className="h-4 w-4" />
+                        <span className="truncate">{post.author}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Clock className="h-4 w-4" />
+                        <span>{post.readTime}</span>
+                      </div>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80" onClick={() => setSelectedBlog(post)}>
-                      Read More
-                      <ArrowRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                        <Calendar className="h-4 w-4" />
+                        <span>{post.date}</span>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80" onClick={() => setSelectedBlog(post)}>
+                        Read More
+                        <ArrowRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
 
           {/* Load More */}
           {blogPosts.filter(post => !post.featured && (activeCategory === "All" || post.category === activeCategory)).length > visiblePosts && (
             <div className="text-center mt-12">
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="px-8"
                 onClick={() => setVisiblePosts(prev => prev + 6)}
               >
@@ -550,9 +535,9 @@ const Blog = () => {
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:bg-white/20"
                 disabled={isSubmitting}
               />
-              <Button 
-                type="submit" 
-                variant="outline" 
+              <Button
+                type="submit"
+                variant="outline"
                 className="bg-white text-primary hover:bg-white/90 hover:text-primary border-white whitespace-nowrap"
                 disabled={isSubmitting}
               >
@@ -567,7 +552,7 @@ const Blog = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-foreground mb-12 text-center">Popular Topics</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center border-0 shadow-card hover:shadow-hover transition-all duration-300">
               <CardHeader>
@@ -578,8 +563,8 @@ const Blog = () => {
                 <p className="text-muted-foreground mb-4">
                   Latest developments and emerging trends in pharmaceutical and healthcare industries.
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={() => window.open('https://www.google.com/search?q=pharmaceutical+industry+trends+2025', '_blank')}
                 >
@@ -587,7 +572,7 @@ const Blog = () => {
                 </Button>
               </CardContent>
             </Card>
-            
+
             <Card className="text-center border-0 shadow-card hover:shadow-hover transition-all duration-300">
               <CardHeader>
                 <Heart className="h-12 w-12 text-primary mx-auto mb-4" />
@@ -597,8 +582,8 @@ const Blog = () => {
                 <p className="text-muted-foreground mb-4">
                   Best practices and innovations for improving patient outcomes and healthcare delivery.
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={() => window.open('https://www.google.com/search?q=patient+care+best+practices+healthcare', '_blank')}
                 >
@@ -606,7 +591,7 @@ const Blog = () => {
                 </Button>
               </CardContent>
             </Card>
-            
+
             <Card className="text-center border-0 shadow-card hover:shadow-hover transition-all duration-300">
               <CardHeader>
                 <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
@@ -616,8 +601,8 @@ const Blog = () => {
                 <p className="text-muted-foreground mb-4">
                   Stay compliant with the latest regulatory changes and industry standards.
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={() => window.open('https://www.google.com/search?q=pharmaceutical+regulatory+updates+compliance', '_blank')}
                 >
@@ -634,8 +619,8 @@ const Blog = () => {
         <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
           <DialogHeader>
             <div className="relative w-full h-64 -mx-6 -mt-6 mb-4">
-              <img 
-                src={selectedBlog?.image} 
+              <img
+                src={selectedBlog?.image}
                 alt={selectedBlog?.title}
                 className="w-full h-full object-cover"
               />
@@ -661,7 +646,7 @@ const Blog = () => {
               </div>
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="overflow-y-auto pr-2">
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
               {selectedBlog?.content}

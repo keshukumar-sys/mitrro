@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -68,93 +67,39 @@ const AdminDashboard = () => {
     if (!loading && (!user || !isAdmin)) navigate("/admin/login");
   }, [user, isAdmin, loading, navigate]);
 
-  // Fetch all data when admin loads
+  // Fetch all data (Mocked)
   useEffect(() => {
     if (user && isAdmin) fetchAllData();
   }, [user, isAdmin]);
 
   const fetchAllData = async () => {
-    try {
-      const [
-        contactsRes,
-        newslettersRes,
-        logsRes,
-        ordersRes,
-        profilesRes,
-        brandInquiriesRes,
-        businessRegRes,
-      ] = await Promise.all([
-        supabase.from("contact_inquiries").select("*").order("created_at", { ascending: false }),
-        supabase.from("newsletter_subscriptions").select("*").order("subscribed_at", { ascending: false }),
-        supabase.from("login_logs").select("*").order("created_at", { ascending: false }),
-        supabase.from("orders").select("*, order_items(*)").order("created_at", { ascending: false }),
-        supabase.from("profiles").select("*").order("created_at", { ascending: false }),
-        supabase.from("brand_inquiries").select("*").order("created_at", { ascending: false }),
-        supabase.from("business_registrations").select("*").order("created_at", { ascending: false }),
-      ]);
-
-      if (contactsRes.error) throw contactsRes.error;
-      if (newslettersRes.error) throw newslettersRes.error;
-      if (logsRes.error) throw logsRes.error;
-      if (ordersRes.error) throw ordersRes.error;
-      if (profilesRes.error) throw profilesRes.error;
-      if (brandInquiriesRes.error) throw brandInquiriesRes.error;
-      if (businessRegRes.error) throw businessRegRes.error;
-
-      setContacts(contactsRes.data || []);
-      setNewsletters(newslettersRes.data || []);
-      setLoginLogs(logsRes.data || []);
-      setOrders(ordersRes.data || []);
-      setProfiles(profilesRes.data || []);
-      setBrandInquiries(brandInquiriesRes.data || []);
-      setBusinessRegistrations(businessRegRes.data || []);
-    } catch (error: any) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    }
+    // TODO: Connect to MongoDB admin APIs
+    setContacts([]);
+    setNewsletters([]);
+    setLoginLogs([]);
+    setOrders([]);
+    setProfiles([]);
+    setBrandInquiries([]);
+    setBusinessRegistrations([]);
   };
 
-  // Create product or special offer
+  // Create product or special offer (Mocked)
   const createProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      if (productForm.isSpecial) {
-        const { error } = await supabase.from("special_offer").insert([{
-          name: productForm.name,
-          price: Number(productForm.price),
-          discounted_price: Number(productForm.discounted_price),
-          description: productForm.description,
-          quantity: Number(productForm.quantity),
-          image_url: productForm.image_url,
-        }]);
-        if (error) throw error;
-        toast({ title: "Special Offer Created", description: "Special offer successfully added." });
-      } else {
-        const { error } = await supabase.from("products").insert([{
-          name: productForm.name,
-          price: Number(productForm.price),
-          description: productForm.description,
-          quantity: Number(productForm.quantity),
-          image_url: productForm.image_url,
-          category: productForm.category,
-        }]);
-        if (error) throw error;
-        toast({ title: "Product Created", description: "Product successfully added." });
-      }
+    // TODO: Connect to MongoDB products API
+    toast({ title: "Product Created", description: "Product creation is mocked for now." });
 
-      // Reset form
-      setProductForm({
-        name: "",
-        price: "",
-        discounted_price: "",
-        description: "",
-        quantity: "",
-        image_url: "",
-        category: "",
-        isSpecial: false,
-      });
-    } catch (err: any) {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
-    }
+    // Reset form
+    setProductForm({
+      name: "",
+      price: "",
+      discounted_price: "",
+      description: "",
+      quantity: "",
+      image_url: "",
+      category: "",
+      isSpecial: false,
+    });
   };
 
   const handleLogout = async () => {
@@ -445,12 +390,9 @@ const AdminDashboard = () => {
                             className="border rounded p-1"
                             onChange={async e => {
                               const newStatus = e.target.value;
-                              const { error } = await supabase.from("orders").update({ status: newStatus }).eq("id", order.id);
-                              if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-                              else {
-                                toast({ title: "Success", description: "Order status updated" });
-                                setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: newStatus } : o));
-                              }
+                              // TODO: Connect to MongoDB order update API
+                              toast({ title: "Success", description: "Order status updated (mocked)" });
+                              setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: newStatus } : o));
                             }}
                           >
                             <option value="pending">Pending</option>

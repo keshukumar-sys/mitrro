@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import logoMitrro from "@/assets/logo-mitrro.webp";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +12,7 @@ const Footer = () => {
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !email.includes('@')) {
       toast({
         title: "Invalid Email",
@@ -26,39 +25,21 @@ const Footer = () => {
     setIsSubmitting(true);
 
     try {
-      const { data: insertedData, error } = await supabase
-        .from('newsletter_subscriptions')
-        .insert({ email })
-        .select();
-
-      if (error) {
-        console.error("Newsletter subscription error:", error);
-        throw error;
-      }
-
-      console.log("Newsletter subscription successful:", insertedData);
-
+      // TODO: Connect to MongoDB newsletter API
+      console.log("Newsletter email:", email);
       setEmail("");
-      
+
       toast({
         title: "Subscribed!",
         description: "You've successfully subscribed to our newsletter.",
       });
     } catch (error: any) {
       console.error("Error subscribing to newsletter:", error);
-      if (error.code === '23505') {
-        toast({
-          title: "Already Subscribed",
-          description: "This email is already subscribed to our newsletter.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: error?.message || "Failed to subscribe. Please try again.",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Error",
+        description: error?.message || "Failed to subscribe. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -71,14 +52,14 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-6">
             <div className="flex items-center gap-2">
-              <img 
-                src={logoMitrro} 
-                alt="Mitrro Logo" 
+              <img
+                src={logoMitrro}
+                alt="Mitrro Logo"
                 className="h-10 w-auto"
               />
             </div>
             <p className="text-background/80 leading-relaxed">
-              Providing pharmaceutical products of global quality standard to patients worldwide. 
+              Providing pharmaceutical products of global quality standard to patients worldwide.
               Your trusted partner in healthcare solutions.
             </p>
             <div className="flex gap-4">
@@ -142,20 +123,20 @@ const Footer = () => {
                 <span>South Delhi 110001 Delhi IN</span>
               </a>
             </div>
-            
+
             <div>
               <h5 className="font-semibold mb-3">Newsletter</h5>
               <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
-                <Input 
+                <Input
                   type="email"
-                  placeholder="Your email" 
+                  placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-background/10 border-background/20 text-background placeholder:text-background/60"
                   disabled={isSubmitting}
                 />
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="bg-gradient-primary hover:bg-gradient-secondary"
                   disabled={isSubmitting}
                 >

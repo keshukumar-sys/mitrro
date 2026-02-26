@@ -27,7 +27,7 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3002";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://mitrro-backend-mongodb.onrender.com";
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);

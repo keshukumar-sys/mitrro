@@ -26,7 +26,7 @@ import { User, Mail, Phone, Package, Settings } from "lucide-react";
 import { toast } from "sonner";
 
 const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:3002";
+  import.meta.env.VITE_BACKEND_URL || "https://mitrro-backend-mongodb.onrender.com";
 
 const profileSchema = z.object({
   full_name: z.string().trim().min(2),

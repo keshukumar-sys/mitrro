@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, Heart } from "lucide-react";
 import AddToCartButton from "@/components/AddToCartButton";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 
@@ -34,72 +33,16 @@ const ProductCard = ({
 
   // Get logged-in user
   useEffect(() => {
-    const loadUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUserId(data?.user?.id || null);
-      console.log(userId);
-    };
-    loadUser();
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        setUserId(user.id || null);
+      } catch (e) {
+        console.error('Failed to parse user', e);
+      }
+    }
   }, []);
-
-  // // Check if already in wishlist
-  // useEffect(() => {
-  //   if (!userId) return;
-
-  //   const checkWishlist = async () => {
-  //     const { data } = await supabase
-  //       .from("wishlist")
-  //       .select("id")
-  //       .eq("user_id", userId)
-  //       .eq("product_id", id)
-  //       .single();
-
-  //     if (data) setIsWishlisted(true);
-  //   };
-
-  //   checkWishlist();
-  // }, [userId]);
-
-  // Add to wishlist
-  // const addToWishlist = async (e: any) => {
-  //   e.stopPropagation();
-  //   if (!userId) {
-  //     toast({
-  //       title: "Login required",
-  //       description: "You need to sign in to use wishlist",
-  //       variant: "destructive",
-  //     });
-  //     return;
-  //   }
-
-  //   if (isWishlisted) {
-  //     toast({
-  //       title: "Already in Wishlist",
-  //       description: "This item is already in your wishlist.",
-  //     });
-  //     return;
-  //   }
-
-  //   const { error } = await supabase.from("wishlist").insert({
-  //     user_id: userId,
-  //     product_id: id,
-  //   });
-  //   console.log(error);
-
-  //   if (error) {
-  //     toast({
-  //       title: "Error",
-  //       description: "Failed to add to wishlist.",
-  //       variant: "destructive",
-  //     });
-  //   } else {
-  //     setIsWishlisted(true);
-  //     toast({
-  //       title: "Added to Wishlist",
-  //       description: `${name} was added successfully.`,
-  //     });
-  //   }
-  // };
 
   // Calculate discount
   const discount =
@@ -145,18 +88,6 @@ const ProductCard = ({
             <Eye className="h-4 w-4" />
           </Button>
 
-          {/* <Button
-            size="icon"
-            variant="secondary"
-            className="rounded-full"
-            onClick={addToWishlist}
-          >
-            <Heart
-              className={`h-4 w-4 ${
-                isWishlisted ? "text-red-500 fill-red-500" : ""
-              }`}
-            />
-          </Button> */}
         </div>
       </div>
 
@@ -184,7 +115,6 @@ const ProductCard = ({
             name,
             price,
             image,
-            maxQuantity,
           }}
         />
       </CardContent>
