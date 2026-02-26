@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "razorpay": "npm:razorpay",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js"
+  }
+}
