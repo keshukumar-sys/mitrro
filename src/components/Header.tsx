@@ -13,36 +13,20 @@ import {
 import logoMitrro from "@/assets/logo-mitrro.webp";
 import Cart from "@/components/Cart";
 import { toast } from "sonner";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
 
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // ✅ USER FROM LOCAL STORAGE (MongoDB Login)
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+  // ✅ USER FROM AUTH CONTEXT (reactive — updates on login/logout)
+  const { user, signOut } = useAuth();
 
   const handleLogout = async () => {
     try {
-      await fetch(
-        "https://mitrro-backend-mongodb.onrender.com/api/users/logout",
-        {
-          method: "POST",
-          credentials: "include"
-        }
-      );
-
-      localStorage.removeItem("user");
-      setUser(null);
-
+      await signOut();
       toast.success("Logged out successfully");
       navigate("/");
     } catch {
@@ -168,9 +152,10 @@ const Header = () => {
             <Link to="/categories"><Button variant="ghost" className="font-medium">Categories</Button></Link>
             <Link to="/brands"><Button variant="ghost" className="font-medium">Brands</Button></Link>
             <Link to="/about-us"><Button variant="ghost" className="font-medium">About Us</Button></Link>
-            <Link to="/contact"><Button variant="ghost" className="font-medium">Contact</Button></Link>
             <Link to="/blog"><Button variant="ghost" className="font-medium">Blog</Button></Link>
+            <Link to="/contact"><Button variant="ghost" className="font-medium">Contact</Button></Link>
             <div className="ml-auto">
+
               <Button className="bg-gradient-primary hover:opacity-90">
                 <Link to={'/special_offer'}>Special Offer</Link>
               </Button>

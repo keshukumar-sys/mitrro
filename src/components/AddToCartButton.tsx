@@ -10,6 +10,7 @@ interface AddToCartButtonProps {
     id: string;
     name: string;
     price: number;
+    discountedPrice?: number;
     image: string;
   };
   variant?: "default" | "outline" | "secondary" | "ghost";
@@ -47,7 +48,7 @@ const AddToCartButton = ({
         method: "POST",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           productId: product.id,

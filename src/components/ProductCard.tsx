@@ -11,7 +11,7 @@ interface ProductCardProps {
   id: string;
   name: string;
   price: number;
-  originalPrice?: number;
+  discountedPrice?: number;
   image: string;
   category?: string;
   maxQuantity: number;
@@ -21,11 +21,16 @@ const ProductCard = ({
   id,
   name,
   price,
-  originalPrice,
+  discountedPrice,
   image,
   category,
   maxQuantity,
 }: ProductCardProps) => {
+  const discount =
+    discountedPrice && price
+      ? Math.round(((price - discountedPrice) / price) * 100)
+      : 0;
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const [userId, setUserId] = useState<string | null>(null);
@@ -45,10 +50,10 @@ const ProductCard = ({
   }, []);
 
   // Calculate discount
-  const discount =
-    originalPrice && originalPrice > price
-      ? Math.round(((originalPrice - price) / originalPrice) * 100)
-      : 0;
+  // const discount =
+  //   originalPrice && originalPrice > price
+  //     ? Math.round(((originalPrice - price) / originalPrice) * 100)
+  //     : 0;
 
   return (
     <Card className="group overflow-hidden bg-gradient-card border-0 shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1">
@@ -96,13 +101,16 @@ const ProductCard = ({
           {name}
         </h3>
 
-        <div className="flex items-center gap-2 mb-4 text-lg font-bold">
-          {discount > 0 ? (
+         <div className="flex items-center gap-2 mb-4 text-lg font-bold">
+          {discountedPrice ? (
             <>
-              <span className="text-muted-foreground line-through">
-                ₹{originalPrice}
+              <span className="text-primary">
+                ₹{discountedPrice}
               </span>
-              <span className="text-primary">₹{price}</span>
+
+              <span className="text-muted-foreground line-through text-sm">
+                ₹{price}
+              </span>
             </>
           ) : (
             <span className="text-primary">₹{price}</span>

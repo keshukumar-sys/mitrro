@@ -18,6 +18,7 @@ interface BackendProduct {
   name: string;
   description?: string;
   price: number;
+  discountedPrice?: number;
   images?: { url: string }[];
   category: string;
 }
@@ -149,11 +150,23 @@ const Categories: React.FC = () => {
                           </p>
                         )}
                       </div>
+                         <div className="flex items-center justify-between mt-auto">
 
-                      <div className="flex items-center justify-between mt-auto">
-                        <span className="text-indigo-600 font-semibold text-sm">
-                          ₹{product.price.toLocaleString()}
-                        </span>
+                        {product.discountedPrice ? (
+                          <div className="flex flex-col">
+                            <span className="text-indigo-600 font-semibold text-sm">
+                              ₹{product.discountedPrice.toLocaleString()}
+                            </span>
+                            <span className="text-xs line-through text-muted-foreground">
+                              ₹{product.price.toLocaleString()}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-indigo-600 font-semibold text-sm">
+                            ₹{product.price.toLocaleString()}
+                          </span>
+                        )}
+                          
                         <Button
                           size="sm"
                           className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90"

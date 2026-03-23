@@ -68,20 +68,20 @@ const ProductDetail: React.FC = () => {
 
   const handleAddToCart = (): void => {
     if (!product) return;
+     const finalPrice = product.discountedPrice ?? product.price;
 
-    addItem({
-      id: product._id,
-      name: product.name,
-      price: product.discountedPrice ?? product.price,
-      image: product.images?.[0]?.url ?? "/placeholder.png",
-      maxQuantity: product.stock,
-    }, selectedQuantity);
-
+    addItem(product._id, selectedQuantity);
     toast({
       title: "Added to Cart",
       description: `${selectedQuantity} × ${product.name} added to your cart.`,
     });
   };
+  const discount =
+    product?.discountedPrice && product?.price
+      ? Math.round(
+          ((product.price - product.discountedPrice) / product.price) * 100
+        )
+      : 0;
 
   /* ================= LOADING ================= */
 

@@ -45,6 +45,15 @@ const Checkout = () => {
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const originalSubtotal = items.reduce(
+    (sum, item) => sum + (item.originalPrice ?? item.price) * item.quantity,
+    0
+  );
+  const finalTotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  const discountAmount = originalSubtotal - finalTotal;
 
   const placeOrderCOD = async () => {
     setIsSubmitting(true);
@@ -86,7 +95,7 @@ const Checkout = () => {
       if (!data.success) throw new Error(data.message || "Failed to place order");
 
       console.log(data);
-      
+
       toast({
         title: "Order Placed",
         description: "Your order has been placed successfully.",
@@ -154,15 +163,34 @@ const Checkout = () => {
                         />
                         <div>
                           <p className="font-medium">{item.name}</p>
+
+                          {/* Show Discounted Price + Original */}
+                          {item.originalPrice && item.originalPrice > item.price ? (
+                            <div className="flex gap-2 text-sm">
+                              <span className="text-primary font-semibold">
+                                ₹{item.price.toFixed(2)}
+                              </span>
+                              <span className="line-through text-muted-foreground">
+                                ₹{item.originalPrice.toFixed(2)}
+                              </span>
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground">
+                              ₹{item.price.toFixed(2)}
+                            </p>
+                          )}
+
                           <p className="text-sm text-muted-foreground">
                             Qty: {item.quantity}
                           </p>
                         </div>
                       </div>
+
                       <p className="font-medium">
                         ₹{(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
+
                     <Button
                       variant="outline"
                       size="sm"
@@ -180,9 +208,19 @@ const Checkout = () => {
                   </div>
                 ))}
                 <Separator />
+                <div className="flex justify-between text-sm text-muted-foreground mb-1">
+                  <span>Subtotal</span>
+                  <span>₹{originalSubtotal.toFixed(2)}</span>
+                </div>
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-sm text-green-600 mb-2">
+                    <span>Discount</span>
+                    <span>-₹{discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span>₹{totalPrice.toFixed(2)}</span>
+                  <span>₹{finalTotal.toFixed(2)}</span>
                 </div>
               </div>
             </CardContent>

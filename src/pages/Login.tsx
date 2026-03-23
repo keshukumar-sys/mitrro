@@ -15,10 +15,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 const Login = () => {
@@ -28,6 +29,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signIn } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,17 +37,16 @@ const Login = () => {
 
     try {
       const validated = loginSchema.parse(formData);
+      const { error } = await signIn(validated.email, validated.password);
 
-      const res = await fetch("https://mitrro-backend-mongodb.onrender.com/api/users/login", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validated),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      if (error) {
+        toast({
+          title: "Login failed",
+          description: error,
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({ title: "Login successful", description: "Welcome back!" });
       navigate("/");

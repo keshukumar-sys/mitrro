@@ -16,13 +16,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 const signupSchema = z
   .object({
-    name: z.string().min(2),
-    email: z.string().email(),
-    phone: z.string().min(10),
-    password: z.string().min(6),
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email"),
+    phone: z.string().min(10, "Phone must be at least 10 digits"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -43,6 +44,7 @@ const Signup = () => {
 
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,23 +53,21 @@ const Signup = () => {
     try {
       const validated = signupSchema.parse(formData);
 
-      const res = await fetch("https://mitrro-backend-mongodb.onrender.com/api/users/signup", {
-        method: "POST",
-        credentials: "include", // ✅ COOKIE AUTH
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: validated.name,
-          email: validated.email,
-          phone: validated.phone,
-          password: validated.password,
-        }),
+      const { error } = await signUp({
+        name: validated.name,
+        email: validated.email,
+        phone: validated.phone,
+        password: validated.password,
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      if (error) {
+        toast({
+          title: "Signup failed",
+          description: error,
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Account created",

@@ -7,7 +7,7 @@ import { BackendProduct } from "@/types/product";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const FeaturedProducts = () => {
+const BigSavings = () => {
   const [products, setProducts] = useState<BackendProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,12 +15,21 @@ const FeaturedProducts = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `${BACKEND_URL}/api/products/total_products`
+          `${BACKEND_URL}/api/products?category=Big Savings`
         );
 
-        setProducts(res.data.products || []);
+        let categoryProducts: BackendProduct[] =
+          res.data.products || res.data || [];
+
+        // remove products without images
+        categoryProducts = categoryProducts.filter(
+          (p) => p.images && p.images.length > 0
+        );
+
+        // show only first 5
+        setProducts(categoryProducts.slice(0, 5));
       } catch (error) {
-        console.error("Failed to fetch products", error);
+        console.error("Failed to fetch Big Savings products", error);
       } finally {
         setLoading(false);
       }
@@ -29,13 +38,11 @@ const FeaturedProducts = () => {
     fetchProducts();
   }, []);
 
-  const visibleProducts = products.slice(0, 5);
-
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-8 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4">
 
-        {/* Header */}
+        {/* Section Header */}
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-4xl font-bold">
             Big
@@ -45,7 +52,7 @@ const FeaturedProducts = () => {
           </h2>
 
           <Link
-            to="/products"
+            to="/products?category=Big Savings"
             className="flex items-center gap-2 font-semibold text-primary hover:underline"
           >
             View All <ArrowRight className="h-4 w-4" />
@@ -55,23 +62,34 @@ const FeaturedProducts = () => {
         {/* Products */}
         {loading ? (
           <p className="text-center text-muted-foreground">Loading...</p>
+        ) : products.length === 0 ? (
+          <p className="text-center text-muted-foreground">
+            No products available.
+          </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {visibleProducts.map(product => (
-              <ProductCard
+            {products.map((product, index) => (
+              <div
                 key={product._id}
-                id={product._id}
-                name={product.name}
-                price={product.price}
-                image={product.images?.[0]?.url || "/placeholder.png"}
-                maxQuantity={product.stock}
-              />
+                className="animate-slide-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <ProductCard
+                  id={product._id}
+                  name={product.name}
+                  price={product.price}
+                  discountedPrice={product.discountedPrice}   // ✅ FIX ADDED
+                  image={product.images?.[0]?.url || "/placeholder.png"}
+                  maxQuantity={product.stock}
+                />
+              </div>
             ))}
           </div>
         )}
+
       </div>
     </section>
   );
 };
 
-export default FeaturedProducts;
+export default BigSavings;

@@ -7,6 +7,7 @@ interface CartItemProps {
     id: string;
     name: string;
     price: number;
+    originalPrice?: number;
     image: string;
     quantity: number;
     maxQuantity?: number;
@@ -26,9 +27,21 @@ const CartItemComponent = ({ item }: CartItemProps) => {
       />
       <div className="flex-1">
         <h4 className="font-medium text-sm">{item.name}</h4>
-        <p className="text-sm text-muted-foreground">
-          ₹{item.price.toFixed(2)}
-        </p>
+      {item.originalPrice && item.originalPrice > item.price ? (
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-primary">
+                    ₹{item.price.toFixed(2)}
+                  </span>
+                  <span className="text-xs line-through text-muted-foreground">
+                    ₹{item.originalPrice.toFixed(2)}
+                  </span>
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  ₹{item.price.toFixed(2)}
+                </p>
+              )}
+
       </div>
       <div className="flex items-center gap-2">
         <Button

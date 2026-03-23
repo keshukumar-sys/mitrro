@@ -4,9 +4,18 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { BackendProduct } from "@/types/product";
+//import { BackendProduct } from "@/types/product";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+interface BackendProduct {
+  _id: string;
+  name: string;
+  price: number;
+  discountedPrice?: number;
+  images?: { url: string }[];
+  stock: number;
+}
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState<BackendProduct[]>([]);
@@ -67,6 +76,7 @@ const FeaturedProducts = () => {
                   id={product._id}
                   name={product.name}
                   price={product.price}
+                  discountedPrice={product.discountedPrice}
                   image={product.images?.[0]?.url || "/placeholder.png"}
                   maxQuantity={product.stock}
                 />

@@ -5,6 +5,7 @@ interface CartItem {
   id: string;
   name: string;
   price: number;
+  originalPrice?: number;
   image: string;
   quantity: number;
   maxQuantity?: number;
@@ -65,7 +66,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const mapped: CartItem[] = cart.items.map((i: any) => ({
         id: i.productId?._id || i.productId,
         name: i.productId?.name || "Unknown Product",
-        price: i.productId?.price || 0,
+        price: i.productId?.discountedPrice || i.productId?.price || 0,
+        originalPrice: i.productId?.price ?? 0,
         image: i.productId?.images?.[0]?.url || "",
         quantity: i.quantity || 1,
         maxQuantity: i.productId?.stock,
@@ -74,7 +76,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       setItems(mapped);
       setTotalItems(mapped.reduce((sum, item) => sum + item.quantity, 0));
       setTotalPrice(
-        cart.totalPrice ||
         mapped.reduce((sum, item) => sum + item.price * item.quantity, 0)
       );
     } catch (err) {
@@ -172,7 +173,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         decrement,
         removeItem,
         clearCart,
-        refresh,           
+        refresh,
       }}
     >
       {children}

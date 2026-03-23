@@ -340,56 +340,66 @@ const Contact = () => {
       </section>
 
       {/* Additional Support */}
-      <section className="py-16 bg-muted/30">
+      {/* Additional Support */}
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">Need Immediate Assistance?</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               For urgent inquiries or emergency support, use one of these direct contact methods.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <Card className="text-center border-0 shadow-card">
-              <CardHeader>
-                <Phone className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Emergency Line</CardTitle>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Card 1 */}
+            <Card className="flex flex-col text-center border-0 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+              <CardHeader className="pt-8">
+                <div className="mx-auto bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mb-4">
+                  <Phone className="h-10 w-10 text-primary" />
+                </div>
+                <CardTitle className="text-2xl">Emergency Line</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  For urgent medical supply needs
+              <CardContent className="flex-grow flex flex-col justify-between pb-8">
+                <p className="text-muted-foreground mb-8">
+                  Available 24/7 for urgent medical supply needs and critical pharmaceutical logistics.
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-white transition-colors">
                   Call +1-234-567-8911
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-0 shadow-card">
-              <CardHeader>
-                <MessageSquare className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Live Chat</CardTitle>
+            {/* Card 2 */}
+            <Card className="flex flex-col text-center border-0 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+              <CardHeader className="pt-8">
+                <div className="mx-auto bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mb-4">
+                  <MessageSquare className="h-10 w-10 text-primary" />
+                </div>
+                <CardTitle className="text-2xl">Live Chat</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Chat with our support team
+              <CardContent className="flex-grow flex flex-col justify-between pb-8">
+                <p className="text-muted-foreground mb-8">
+                  Connect instantly with our support team for real-time help with your account or orders.
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-white transition-colors">
                   Start Live Chat
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-0 shadow-card">
-              <CardHeader>
-                <Mail className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Priority Support</CardTitle>
+            {/* Card 3 */}
+            <Card className="flex flex-col text-center border-0 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+              <CardHeader className="pt-8">
+                <div className="mx-auto bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mb-4">
+                  <Mail className="h-10 w-10 text-primary" />
+                </div>
+                <CardTitle className="text-2xl">Priority Support</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Email for priority response
+              <CardContent className="flex-grow flex flex-col justify-between pb-8">
+                <p className="text-muted-foreground mb-8">
+                  Get fast-tracked responses for technical integration or complex partnership queries.
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-white transition-colors">
                   Email Priority Support
                 </Button>
               </CardContent>

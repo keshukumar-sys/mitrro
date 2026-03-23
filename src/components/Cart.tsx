@@ -24,7 +24,21 @@ const Cart = () => {
     clearCart,
   } = useCart();
 
-  
+  const originalSubtotal = items.reduce(
+    (sum, item) => sum + (item.originalPrice ?? item.price) * item.quantity,
+    0
+  );
+
+  const finalTotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  const discountAmount = originalSubtotal - finalTotal;
+
+  // Debug: verify cart item structure
+  console.log("Cart items:", items);
+
+
   const handleCheckout = () => {
     closeCart();
     navigate("/checkout");
@@ -71,12 +85,29 @@ const Cart = () => {
               </div>
 
               <div className="border-t border-border pt-4">
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-sm text-muted-foreground mb-1">
+                    <span>Subtotal</span>
+                    <span>₹{originalSubtotal.toFixed(2)}</span>
+                  </div>
+                )}
+
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-sm text-green-600 mb-2">
+                    <span>Discount</span>
+                    <span>-₹{discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
+
+                {/* ===== Final Total ===== */}
+
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-semibold">Total:</span>
                   <span className="text-lg font-bold text-primary">
-                    ₹{totalPrice.toFixed(2)}
+                    ₹{finalTotal.toFixed(2)}
                   </span>
                 </div>
+
 
                 <div className="space-y-2">
                   <Button

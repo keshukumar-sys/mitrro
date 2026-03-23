@@ -16,6 +16,7 @@ interface BackendProduct {
   _id: string;
   name: string;
   price: number;
+  discountedPrice?: number;
   images?: { url: string }[];
   description?: string;
   stock: number;
@@ -130,7 +131,9 @@ const Products: React.FC = () => {
                 <ProductCard
                   id={product._id}
                   name={product.name}
-                  price={product.price}
+                  price={product.discountedPrice ?? product.price}
+                  discountedPrice={product.price}
+
                   image={product.images?.[0]?.url ?? "/placeholder.png"}
                   maxQuantity={product.stock}
                 />

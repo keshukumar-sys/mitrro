@@ -7,7 +7,6 @@ import { BackendProduct } from "@/types/product";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-
 const LabDiagnostics = () => {
   const [products, setProducts] = useState<BackendProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,42 +14,20 @@ const LabDiagnostics = () => {
   useEffect(() => {
     const fetchLabProducts = async () => {
       try {
-       
+
         const categoryRes = await axios.get(
-          `${BACKEND_URL}/api/products?category=Lab & Diagnostics`
+          `${BACKEND_URL}/api/products?category=Lab-Diagnostics`
         );
 
         let categoryProducts: BackendProduct[] =
           categoryRes.data.products || categoryRes.data || [];
 
-     
         categoryProducts = categoryProducts.filter(
-          p => p.images && p.images.length > 0
+          (p) => p.images && p.images.length > 0
         );
 
-      
-        if (categoryProducts.length < 5) {
-          const allRes = await axios.get(
-            `${BACKEND_URL}/api/products/total_products`
-          );
-
-          const allProducts: BackendProduct[] =
-            allRes.data.products || [];
-
-          const extraProducts = allProducts
-            .filter(
-              p =>
-                p.images &&
-                p.images.length > 0 &&
-                !categoryProducts.some(cp => cp._id === p._id)
-            )
-            .slice(0, 5 - categoryProducts.length);
-
-          categoryProducts = [...categoryProducts, ...extraProducts];
-        }
-
-  
         setProducts(categoryProducts.slice(0, 5));
+
       } catch (error) {
         console.error("Failed to fetch Lab & Diagnostics products", error);
       } finally {
@@ -62,10 +39,9 @@ const LabDiagnostics = () => {
   }, []);
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-8 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4">
 
-       
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-4xl font-bold">
             Lab &
@@ -83,7 +59,6 @@ const LabDiagnostics = () => {
           </Link>
         </div>
 
-   
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {[...Array(5)].map((_, i) => (
@@ -95,12 +70,13 @@ const LabDiagnostics = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {products.map(product => (
+            {products.map((product) => (
               <ProductCard
                 key={product._id}
                 id={product._id}
                 name={product.name}
                 price={product.price}
+                discountedPrice={product.discountedPrice}
                 image={product.images[0].url}
                 maxQuantity={product.stock}
               />
