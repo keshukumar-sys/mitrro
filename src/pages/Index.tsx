@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import Footer from "@/components/Footer";
 import Categories from '@/components/Categories';
-import Reviews from '@/components/Reviews';
+//import Reviews from '@/components/Reviews';
 import FaqPage from '@/components/Faq';
 import BigSaving from '@/components/BigSaving';
 import HealthCareEssential from '@/components/HealthCareEssential';
@@ -40,7 +40,7 @@ const Index = () => {
         <AdvancedWoundCare />
         {/* <CategoryProducts/> */}
         <CustomerReviews />
-        <Reviews />
+        {/* <Reviews /> */}
         <FaqPage />
       </main>
       <Footer />
