@@ -43,9 +43,12 @@ const Products: React.FC = () => {
       try {
         setLoading(true);
 
-        const res = await axios.get<ProductsResponse>(
-          `${BACKEND_URL}/api/products`
-        );
+        // Build the URL — append the category filter when present
+        const url = categoryName
+          ? `${BACKEND_URL}/api/products?category=${encodeURIComponent(categoryName)}`
+          : `${BACKEND_URL}/api/products`;
+
+        const res = await axios.get<ProductsResponse>(url);
 
         setProducts(res.data.products || []);
       } catch (error) {
@@ -56,7 +59,7 @@ const Products: React.FC = () => {
     };
 
     fetchProductsFromBackend();
-  }, []);
+  }, [categoryName]);
 
   /* ================= SEARCH FILTER ================= */
 

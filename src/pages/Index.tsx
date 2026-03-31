@@ -10,6 +10,7 @@ import BigSaving from '@/components/BigSaving';
 import HealthCareEssential from '@/components/HealthCareEssential';
 import LabDiagnostics from "@/components/LabDiagnostics";
 import AdvancedWoundCare from "@/components/AdvancedWoundCare";
+import CustomerReviews from "@/components/CustomerReviews";
 //import CategoryProducts from '@/components/CategoryProducts';
 
 const Index = () => {
@@ -27,17 +28,18 @@ const Index = () => {
           `}
         </script>
       </Head>
-      
+
       <Header />
       <main>
         <Hero />
         <Categories />
         <FeaturedProducts />
-         <BigSaving/>
-        <HealthCareEssential/>
-        <LabDiagnostics/>
-        <AdvancedWoundCare/>
+        <BigSaving />
+        <HealthCareEssential />
+        <LabDiagnostics />
+        <AdvancedWoundCare />
         {/* <CategoryProducts/> */}
+        <CustomerReviews />
         <Reviews />
         <FaqPage />
       </main>

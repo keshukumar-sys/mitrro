@@ -78,6 +78,19 @@ const Categories: React.FC = () => {
     return acc;
   }, {});
 
+  /* ================= HANDLE VIEW CLICK ================= */
+  const handleViewProduct = (productId: string) => {
+    // Scroll to top before navigation
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",   // Use "instant" so it doesn't animate during navigation
+    });
+
+    // Navigate to product page
+    navigate(`/products/${productId}`);
+  };
+
   /* ================= UI ================= */
 
   return (
@@ -150,8 +163,8 @@ const Categories: React.FC = () => {
                           </p>
                         )}
                       </div>
-                         <div className="flex items-center justify-between mt-auto">
 
+                      <div className="flex items-center justify-between mt-auto">
                         {product.discountedPrice ? (
                           <div className="flex flex-col">
                             <span className="text-indigo-600 font-semibold text-sm">
@@ -166,13 +179,11 @@ const Categories: React.FC = () => {
                             ₹{product.price.toLocaleString()}
                           </span>
                         )}
-                          
+
                         <Button
                           size="sm"
                           className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90"
-                          onClick={() =>
-                            navigate(`/products/${product._id}`)
-                          }
+                          onClick={() => handleViewProduct(product._id)}   // ← Fixed here
                         >
                           View
                         </Button>

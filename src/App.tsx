@@ -38,6 +38,7 @@ import AdvancedWoundCare from "./components/AdvancedWoundCare";
 import BulkOrders from "./pages/BulkOrder";
 import BulkCheckout from "./pages/BulkCheckout";
 import Search from "./pages/Search";
+import ScrollToTop from "./components/ScrollToTop";
 import OrderTracking from "./pages/OrderTracking";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollToTop />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/categories" element={<Categories />} />

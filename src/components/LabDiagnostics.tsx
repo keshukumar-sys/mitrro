@@ -51,7 +51,7 @@ const LabDiagnostics = () => {
           </h2>
 
           <Link
-            to="/products?category=Lab & Diagnostics"
+            to="/products?category=Lab-Diagnostics"
             className="flex items-center gap-2 font-semibold text-primary hover:underline"
           >
             View All

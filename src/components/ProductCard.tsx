@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Heart } from "lucide-react";
+import { Eye } from "lucide-react";
 import AddToCartButton from "@/components/AddToCartButton";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -34,7 +34,6 @@ const ProductCard = ({
   const navigate = useNavigate();
   const { toast } = useToast();
   const [userId, setUserId] = useState<string | null>(null);
-  const [isWishlisted, setIsWishlisted] = useState(false);
 
   // Get logged-in user
   useEffect(() => {
@@ -49,17 +48,27 @@ const ProductCard = ({
     }
   }, []);
 
-  // Calculate discount
-  // const discount =
-  //   originalPrice && originalPrice > price
-  //     ? Math.round(((originalPrice - price) / originalPrice) * 100)
-  //     : 0;
+  const handleViewProduct = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+
+    // Navigate to product page
+    navigate(`/products/${id}`);
+
+    // Force scroll to top immediately after navigation
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant'   // 'instant' prevents any sliding animation from bottom
+      });
+    }, 10);
+  };
 
   return (
-    <Card className="group overflow-hidden bg-gradient-card border-0 shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1">
+    <Card className="group overflow-hidden bg-gradient-card border-0 shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
       <div
         className="relative overflow-hidden cursor-pointer"
-        onClick={() => navigate(`/products/${id}`)}
+        onClick={handleViewProduct}
       >
         <img
           src={image}
@@ -84,31 +93,35 @@ const ProductCard = ({
           <Button
             size="icon"
             variant="secondary"
-            className="rounded-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/products/${id}`);
-            }}
+            className="rounded-full hover:scale-110 transition-transform"
+            onClick={handleViewProduct}
           >
             <Eye className="h-4 w-4" />
           </Button>
-
         </div>
       </div>
 
-      <CardContent className="p-6 space-y-4">
-        <h3 className="font-semibold text-lg leading-tight line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+      <CardContent className="p-4 flex flex-col flex-grow">
+        <h3
+          className="font-semibold text-base leading-snug h-[2.75rem] overflow-hidden cursor-pointer group-hover:text-primary transition-colors"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+          }}
+          onClick={handleViewProduct}
+          title={name}
+        >
           {name}
         </h3>
 
-         <div className="flex items-center gap-2 mb-4 text-lg font-bold">
+        <div className="flex items-center gap-2 mt-2 mb-3 text-base font-bold">
           {discountedPrice ? (
             <>
               <span className="text-primary">
                 ₹{discountedPrice}
               </span>
-
-              <span className="text-muted-foreground line-through text-sm">
+              <span className="text-muted-foreground line-through text-xs">
                 ₹{price}
               </span>
             </>
@@ -117,14 +130,16 @@ const ProductCard = ({
           )}
         </div>
 
-        <AddToCartButton
-          product={{
-            id,
-            name,
-            price,
-            image,
-          }}
-        />
+        <div className="mt-auto">
+          <AddToCartButton
+            product={{
+              id,
+              name,
+              price,
+              image,
+            }}
+          />
+        </div>
       </CardContent>
     </Card>
   );

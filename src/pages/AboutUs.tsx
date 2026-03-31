@@ -41,12 +41,12 @@ const AboutUs = () => {
             <Card className="shadow-card border-0 bg-gradient-card">
               <CardHeader>
                 <CardTitle className="flex items-center text-2xl">
-                  <Globe className="h-8 w-8 text-primary mr-3" />
+                  <Globe className="h-10 w-10 text-primary mr-4" />
                   Our Vision
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
+                <p className="text-lg text-muted-foreground leading-relaxed">
                   To be the world's most trusted pharmaceutical partner, setting new standards in healthcare supply chain excellence and making quality medical care accessible to every community.
                 </p>
               </CardContent>
