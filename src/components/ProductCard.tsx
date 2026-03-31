@@ -103,7 +103,7 @@ const ProductCard = ({
 
       <CardContent className="p-4 flex flex-col flex-grow">
         <h3
-          className="font-semibold text-base leading-snug h-[2.75rem] overflow-hidden cursor-pointer group-hover:text-primary transition-colors"
+          className="font-semibold text-base leading-snug h-[2.85rem] overflow-hidden cursor-pointer group-hover:text-primary transition-colors"
           style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
